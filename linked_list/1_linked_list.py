@@ -15,6 +15,7 @@ head.next.next = node(3)
 
 
 
+# TODO: Check if fully correct ***
 class LinkedList:
     def __init__(self):
         self.head = None

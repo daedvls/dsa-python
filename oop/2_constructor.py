@@ -2,7 +2,7 @@ class Student:
 
     # Class Variable
     # Shared by ALL objects of this class.
-    school_name = "IITK"
+    school_name = "ABC"
 
     def __init__(self, name, roll_no, password):
         """
@@ -48,7 +48,7 @@ print("CONSTRUCTOR EXAMPLE")
 
 
 # Creating objects
-s1 = Student("Joel", 101)
+s1 = Student("Bob", 101)
 s2 = Student("Alice", 102)
 
 s1.introduce()
