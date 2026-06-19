@@ -1,0 +1,623 @@
+"""
+============================================
+OBJECT ORIENTED PROGRAMMING (OOP) IN PYTHON
+============================================
+
+1. Classes and Objects
+2. Constructors (__init__)
+3. Instance Variables
+4. Class Variables
+5. Encapsulation
+6. Inheritance
+7. Polymorphism
+8. Abstraction
+9. Dunder (Magic) Methods
+10. Method Overriding
+11. super()
+12. Property Decorators
+
+
+"""
+
+from abc import ABC, abstractmethod
+
+
+# 1. BASIC CLASS
+
+class Student:
+
+    # Class Variable
+    # Shared by ALL objects of this class.
+    school_name = "IITK"
+
+    def __init__(self, name, roll_no):
+        """
+        CONSTRUCTOR
+
+        __init__ is called automatically whenever an object
+        is created.
+
+        It initializes object attributes.
+
+        self refers to the CURRENT object being created.
+        """
+
+        self.name = name
+        self.roll_no = roll_no
+
+    def introduce(self):
+        """Instance Method"""
+
+        print(
+            f"Hi, I am {self.name} "
+            f"and my roll number is {self.roll_no}"
+        )
+
+print("CONSTRUCTOR EXAMPLE")
+
+
+# Creating objects
+s1 = Student("Joel", 101)
+s2 = Student("Alice", 102)
+
+s1.introduce()
+s2.introduce()
+
+print("School:", Student.school_name)
+
+
+
+# 2. ENCAPSULATION
+
+"""
+
+- Access specifiers: controls visibility of class members.
+three types: Public, Protected, Private
+
+Public: available for access to all
+Protected: Available for access to class and its children
+Private: Available for access to class only
+
+
+Protected data members are denoted by a single underscore prefix (e.g., _password).
+Private data members are denoted by a double underscore prefix (e.g., __balance).
+
+
+ENCAPSULATION
+
+
+Encapsulation means:
+    Bundling data and methods together
+    while restricting direct access.
+
+Python doesn't have strict private members
+like C++ or Java.
+
+Instead:
+
+    _variable      -> protected (convention)
+    __variable     -> private (name mangling)
+
+Double underscore is used to hide implementation details.
+"""
+
+
+class BankAccount:
+
+    def __init__(self, owner, balance):
+        self.owner = owner
+
+        # Private variable
+        self.__balance = balance
+
+    def deposit(self, amount):
+        self.__balance += amount
+
+    def withdraw(self, amount):
+
+        if amount <= self.__balance:
+            self.__balance -= amount
+        else:
+            print("Insufficient funds")
+
+    def get_balance(self):
+        """
+        Public method used to access
+        private data safely.
+        """
+        return self.__balance
+
+
+
+print("ENCAPSULATION EXAMPLE")
+
+account = BankAccount("Joel", 1000)
+
+account.deposit(500)
+account.withdraw(200)
+
+print("Balance:", account.get_balance())
+
+# This will fail:
+# print(account.__balance)
+
+# Actual name internally becomes:
+# _BankAccount__balance
+# (name mangling)
+
+
+
+# 3. PROPERTY DECORATORS
+
+"""
+Properties provide controlled access to attributes.
+
+They are commonly used together with encapsulation.
+"""
+
+
+class Temperature:
+
+    def __init__(self, value):
+        self._celsius = value
+
+    @property
+    def celsius(self):
+        """
+        Getter
+        Called when accessing obj.celsius
+        """
+        return self._celsius
+
+    @celsius.setter
+    def celsius(self, value):
+        """
+        Setter
+        Called when assigning obj.celsius = value
+        """
+
+        if value < -273.15:
+            raise ValueError(
+                "Temperature cannot be below absolute zero."
+            )
+
+        self._celsius = value
+
+
+
+print("PROPERTY EXAMPLE")
+
+temp = Temperature(25)
+
+print(temp.celsius)
+
+temp.celsius = 50
+
+print(temp.celsius)
+
+
+
+# 4. INHERITANCE
+
+"""
+INHERITANCE
+
+Inheritance allows one class to reuse
+another class's features.
+
+Parent Class (Base Class)
+to
+Child Class (Derived Class)
+
+Benefits:
+    - Reuse code
+    - Avoid duplication
+    - Build hierarchies
+"""
+
+
+class Animal:
+
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        print("Some generic animal sound")
+
+
+class Dog(Animal):
+    """
+    Dog inherits from Animal.
+    """
+
+    def __init__(self, name, breed):
+
+        # Call parent constructor
+        super().__init__(name)
+
+        self.breed = breed
+
+    def fetch(self):
+        print(f"{self.name} is fetching the ball")
+
+
+
+print("INHERITANCE EXAMPLE")
+
+dog = Dog("Bruno", "Labrador")
+
+print(dog.name)
+print(dog.breed)
+
+dog.speak()
+dog.fetch()
+
+
+
+# 5. POLYMORPHISM
+
+"""
+POLYMORPHISM
+
+Poly = Many
+Morph = Forms
+
+Same interface
+Different behavior
+
+Example:
+Different animals speak differently,
+but all use the method name speak().
+"""
+
+
+class Cat(Animal):
+
+    def speak(self):
+        print("Meow")
+
+
+class Cow(Animal):
+
+    def speak(self):
+        print("Moo")
+
+
+class Lion(Animal):
+
+    def speak(self):
+        print("Roar")
+
+
+
+print("POLYMORPHISM EXAMPLE")
+
+animals = [
+    Cat("Kitty"),
+    Cow("Bessie"),
+    Lion("Simba")
+]
+
+for animal in animals:
+    animal.speak()
+
+"""
+Notice:
+
+animal.speak()
+
+calls different implementations depending
+on the actual object.
+
+This is runtime polymorphism.
+"""
+
+
+
+# 6. METHOD OVERRIDING
+
+"""
+Method overriding occurs when a child class
+provides its own implementation of a parent method.
+"""
+
+
+class Vehicle:
+
+    def start(self):
+        print("Vehicle starting...")
+
+
+class Car(Vehicle):
+
+    def start(self):
+        print("Car engine started")
+
+
+class Bike(Vehicle):
+
+    def start(self):
+        print("Bike engine started")
+
+
+
+print("METHOD OVERRIDING")
+
+car = Car()
+bike = Bike()
+
+car.start()
+bike.start()
+
+
+
+# 7. ABSTRACTION
+
+"""
+ABSTRACTION
+
+Abstraction hides implementation details
+and only exposes essential functionality.
+
+Python uses ABC (Abstract Base Classes).
+
+Abstract classes:
+    - Cannot be instantiated directly.
+    - May contain abstract methods.
+    - Child classes MUST implement them.
+"""
+
+
+class Shape(ABC):
+
+    @abstractmethod
+    def area(self):
+        pass
+
+
+class Rectangle(Shape):
+
+    def __init__(self, length, width):
+        self.length = length
+        self.width = width
+
+    def area(self):
+        return self.length * self.width
+
+
+class Circle(Shape):
+
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return 3.14159 * self.radius ** 2
+
+
+
+print("ABSTRACTION EXAMPLE")
+
+rect = Rectangle(10, 5)
+circle = Circle(4)
+
+print("Rectangle Area:", rect.area())
+print("Circle Area:", circle.area())
+
+# Shape() would fail because it is abstract.
+
+
+
+# 8. DUNDER METHODS
+
+"""
+DUNDER = Double UnderScore
+
+Examples:
+    __init__
+    __str__
+    __repr__
+    __len__
+    __add__
+    __eq__
+
+These methods let your objects behave
+like built-in Python types.
+"""
+
+
+class Book:
+
+    def __init__(self, title, pages):
+        self.title = title
+        self.pages = pages
+
+    def __str__(self):
+        """
+        Human-readable representation.
+
+        Called by:
+            print(object)
+        """
+        return f"Book: {self.title}"
+
+    def __repr__(self):
+        """
+        Developer representation.
+
+        Called in interpreter/debugging.
+        """
+        return (
+            f"Book(title='{self.title}', "
+            f"pages={self.pages})"
+        )
+
+    def __len__(self):
+        """
+        Called by len(object)
+        """
+        return self.pages
+
+
+
+print("DUNDER METHODS")
+
+book = Book("Python Mastery", 500)
+
+print(book)
+
+print(repr(book))
+
+print(len(book))
+
+
+
+# 9. OPERATOR OVERLOADING
+
+
+"""
+Operator overloading is implemented using
+dunder methods.
+
+Example:
+
++  -> __add__
+== -> __eq__
+<  -> __lt__
+"""
+
+
+class Vector:
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        """
+        v1 + v2
+        """
+        return Vector(
+            self.x + other.x,
+            self.y + other.y
+        )
+
+    def __eq__(self, other):
+        """
+        v1 == v2
+        """
+        return (
+            self.x == other.x and
+            self.y == other.y
+        )
+
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+
+
+
+print("OPERATOR OVERLOADING")
+
+
+v1 = Vector(1, 2)
+v2 = Vector(3, 4)
+
+v3 = v1 + v2
+
+print("v1 =", v1)
+print("v2 =", v2)
+print("v1 + v2 =", v3)
+
+print(Vector(1, 2) == Vector(1, 2))
+
+
+
+# 10. MULTILEVEL INHERITANCE
+
+"""
+Grandparent
+    ↓
+Parent
+    ↓
+Child
+"""
+
+
+class LivingThing:
+
+    def live(self):
+        print("Living...")
+
+
+class Mammal(LivingThing):
+
+    def feed_milk(self):
+        print("Feeding milk")
+
+
+class Human(Mammal):
+
+    def think(self):
+        print("Thinking...")
+
+
+
+print("MULTILEVEL INHERITANCE")
+
+person = Human()
+
+person.live()
+person.feed_milk()
+person.think()
+
+
+
+# 11. isinstance() and type()
+
+
+print("TYPE CHECKING")
+
+print(isinstance(person, Human))
+print(isinstance(person, Mammal))
+print(isinstance(person, LivingThing))
+
+print(type(person))
+
+
+
+# SUMMARY
+
+
+print("OOP SUMMARY")
+
+print("""
+1. Constructor
+   -> __init__()
+
+2. Encapsulation
+   -> Hiding data using private variables
+
+3. Inheritance
+   -> Child inherits Parent
+
+4. Polymorphism
+   -> Same method, different behavior
+
+5. Abstraction
+   -> Hide implementation details
+
+6. Dunder Methods
+   -> Special methods like:
+      __init__
+      __str__
+      __repr__
+      __len__
+      __add__
+      __eq__
+
+7. Operator Overloading
+   -> Customize +, -, ==, etc.
+
+8. super()
+   -> Access parent class methods
+
+""")
