@@ -45,34 +45,12 @@ print(x, end="")
 ```python
 print(*arr)
 ```
+Prints array with space between elements
 
-### Print line by line
-```python
-for x in arr:
-    print(x)
-```
 
 ---
 
 # Loops
-
-### Repeat N times
-```python
-for _ in range(n):
-    ...
-```
-
-### Loop with index
-```python
-for i in range(len(arr)):
-    ...
-```
-
-### Loop over values
-```python
-for x in arr:
-    ...
-```
 
 ### Loop over index and value
 ```python
@@ -174,7 +152,7 @@ Length
 len(s)
 ```
 
-Reverse
+Reverse ***
 
 ```python
 s[::-1]
@@ -216,6 +194,14 @@ Replace
 s.replace("old", "new")
 ```
 
+Alphanumerical or not
+
+```python
+s.isalpha()
+s.isalnum()
+s.isnumeric()
+```
+
 ---
 
 # Sets
@@ -252,6 +238,7 @@ st.discard(x)
 
 Membership
 
+Note: This is O(1) (average) lookup!
 ```python
 if x in st:
 ```
